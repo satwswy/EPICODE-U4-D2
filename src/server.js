@@ -1,25 +1,16 @@
-import express from "express";
+import express from "express"
+import listEndpoints from "express-list-endpoints"
+import authorsRouter from "./apis/authors/index.js"
 
-import cors from "cors";
+const server = express()
 
-import listEndpoints from "express-list-endpoints";
+const port = 3001
 
-import authorsRouter from "./authors/index.js";
+server.use(express.json())
 
-const server = express();
+server.use("/authors" , authorsRouter)
 
-const PORT = 3001;
-
-server.use(cors());
-
-server.use(express.json());
-
-server.use("/authors", authorsRouter);
-
-console.log(listEndpoints(server));
-
-server.listen(PORT, () => console.log("✅ Server is running on port : ", PORT));
-
-server.on("error", (error) =>
-  console.log(`❌ Server is not running due to : ${error}`)
-);
+server.listen(port, ()=> {
+    console.table(listEndpoints(server))
+    console.log("Server is running on port: ", port)
+})
